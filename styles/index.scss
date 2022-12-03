@@ -1,1 +1,15 @@
 @import "~bulma/bulma";
+
+html,
+body {
+  height: 100%;
+}
+
+#__next {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  main {
+    flex: 1;
+  }
+}

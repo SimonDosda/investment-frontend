@@ -1,8 +1,12 @@
-export interface Market {
+import { StrapiData } from "./api";
+
+interface BaseMarket {
   name: string;
   country: string;
   currency: string;
 }
+
+export type Market = StrapiData<BaseMarket>;
 
 export const sectors = [
   "Industry",

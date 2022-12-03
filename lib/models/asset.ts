@@ -1,9 +1,11 @@
 import { StrapiData, StrapiResponse } from "./api";
 import { Market } from "./market";
 
-export interface Asset {
+interface BaseAsset {
   name: string;
   sector: string;
   link: string;
-  market: StrapiResponse<StrapiData<Market>>;
+  market: StrapiResponse<Market>;
 }
+
+export type Asset = StrapiData<BaseAsset>;
