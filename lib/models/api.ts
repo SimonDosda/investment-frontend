@@ -12,3 +12,9 @@ export interface StapiAttributes {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface StrapiParameters<T> {
+  sort?: { key: keyof T; order: "asc" | "desc" };
+  pagination?: { page: number; pageSize: number };
+  populate?: "*" | (keyof T)[];
+}
