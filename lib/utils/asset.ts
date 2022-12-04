@@ -1,16 +1,22 @@
+import { ParsedAnalysis } from "../models/analysis";
 import { Asset } from "../models/asset";
 import { OrderAggregate } from "../models/order";
+import { parseStrapiAttributes } from "./api";
 
-export const getLastAnalysis = (asset: Asset) => {
-  const analyses = asset.attributes.analyses.data.map(({ attributes }) => ({
-    ...attributes,
-    createdAt: new Date(attributes.createdAt),
-  }));
+export const getLastAnalysis = (asset: Asset): ParsedAnalysis | null => {
+  const analyses: ParsedAnalysis[] = asset.attributes.analyses.data.map(
+    ({ attributes }) => ({
+      ...attributes,
+      ...parseStrapiAttributes(attributes),
+    })
+  );
   const lastAnalysesTime = Math.max(
     ...analyses.map(({ createdAt }) => createdAt.getTime())
   );
-  return analyses.find(
-    ({ createdAt }) => createdAt.getTime() === lastAnalysesTime
+  return (
+    analyses.find(
+      ({ createdAt }) => createdAt.getTime() === lastAnalysesTime
+    ) || null
   );
 };
 

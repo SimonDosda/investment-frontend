@@ -1,14 +1,17 @@
-import { StrapiData } from "./api";
+import { ParsedStapiAttributes, StrapiData } from "./api";
 
 interface BaseAnalysis {
+  value: number;
   PER: number;
   trend: Trend;
-  dividendYiel: number;
+  dividendYield: number;
   aristocrat: boolean;
   rate: number;
 }
 
 export type Analysis = StrapiData<BaseAnalysis>;
+
+export type ParsedAnalysis = BaseAnalysis & ParsedStapiAttributes;
 
 export const trends = ["rising", "stable", "declining"] as const;
 

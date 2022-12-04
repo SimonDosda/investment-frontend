@@ -7,3 +7,8 @@ interface BaseOrder {
 }
 
 export type Order = StrapiData<BaseOrder>;
+
+export interface OrderAggregate {
+  current: number;
+  expected: number;
+}

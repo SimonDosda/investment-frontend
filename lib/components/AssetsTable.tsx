@@ -4,8 +4,6 @@ import { Asset } from "../models/asset";
 import { getLastAnalysis, getOrderAggregate } from "../utils/asset";
 
 export default function AssetsTable({ assets }: { assets: Asset[] }) {
-  const [selectedAsset, selectAsset] = useState<Asset | null>(null);
-
   return (
     <div className="table-container">
       <table className="table">
@@ -29,19 +27,17 @@ export default function AssetsTable({ assets }: { assets: Asset[] }) {
             const analysis = getLastAnalysis(asset);
             const orderAgreggate = getOrderAggregate(asset);
             return (
-              <tr
-                key={asset.id}
-                onClick={() => selectAsset(asset)}
-                className={`${
-                  selectedAsset?.id === asset.id ? "is-selected" : ""
-                }`}
-              >
-                <td>{asset.attributes.name}</td>
+              <tr key={asset.id}>
+                <td>
+                  <Link href={`/assets/${asset.id}`}>
+                    {asset.attributes.name}
+                  </Link>
+                </td>
                 <td>{asset.attributes.sector}</td>
                 <td>{asset.attributes.market.data.attributes.name}</td>
                 <td>{analysis?.PER || "-"}</td>
                 <td>{analysis?.trend || "-"}</td>
-                <td>{analysis?.dividendYiel || "-"}</td>
+                <td>{analysis?.dividendYield || "-"}</td>
                 <td>{analysis?.aristocrat ? "Y" : "N"}</td>
                 <td>{analysis?.rate || "-"}</td>
                 <td>{orderAgreggate.current || "-"}</td>

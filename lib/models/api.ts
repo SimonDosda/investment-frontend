@@ -5,12 +5,17 @@ export interface StrapiResponse<T> {
 
 export interface StrapiData<T> {
   id: number;
-  attributes: StapiAttributes & T;
+  attributes: StrapiAttributes & T;
 }
 
-export interface StapiAttributes {
+export interface StrapiAttributes {
   createdAt: string;
   updatedAt: string;
+}
+
+export interface ParsedStapiAttributes {
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface StrapiParameters<T> {

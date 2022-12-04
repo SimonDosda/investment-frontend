@@ -17,3 +17,5 @@ export const sectors = [
   "Goods",
   "Automotive",
 ] as const;
+
+export type Sector = typeof sectors[number];
