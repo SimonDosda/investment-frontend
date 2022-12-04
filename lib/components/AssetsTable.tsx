@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Asset } from "../models/asset";
-import { getLastAnalysis } from "../utils/asset";
+import { getLastAnalysis, getOrderAggregate } from "../utils/asset";
 
 export default function AssetsTable({ assets }: { assets: Asset[] }) {
   const [selectedAsset, selectAsset] = useState<Asset | null>(null);
@@ -19,12 +19,15 @@ export default function AssetsTable({ assets }: { assets: Asset[] }) {
             <th>Dividend</th>
             <th>Aristocrat</th>
             <th>Rate</th>
+            <th>Bought</th>
+            <th>Expected</th>
             <th>Link</th>
           </tr>
         </thead>
         <tbody>
           {assets.map((asset) => {
             const analysis = getLastAnalysis(asset);
+            const orderAgreggate = getOrderAggregate(asset);
             return (
               <tr
                 key={asset.id}
@@ -41,6 +44,8 @@ export default function AssetsTable({ assets }: { assets: Asset[] }) {
                 <td>{analysis?.dividendYiel || "-"}</td>
                 <td>{analysis?.aristocrat ? "Y" : "N"}</td>
                 <td>{analysis?.rate || "-"}</td>
+                <td>{orderAgreggate.current || "-"}</td>
+                <td>{orderAgreggate.expected || "-"}</td>
                 <td>
                   <Link
                     href={asset.attributes.link}
