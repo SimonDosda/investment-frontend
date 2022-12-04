@@ -26,7 +26,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
   const { data } = await fetchAPI<Asset[]>(`assets`, {
     populate: "*",
   });
-
   return {
     props: { assets: data },
   };
