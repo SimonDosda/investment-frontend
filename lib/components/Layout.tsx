@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { signOut, useSession } from "next-auth/react";
 import { PropsWithChildren, useState } from "react";
 
 export default function Layout({ children }: PropsWithChildren) {
   const [isActive, setActive] = useState(false);
+  const { data: session } = useSession();
 
   return (
     <>
@@ -32,11 +34,26 @@ export default function Layout({ children }: PropsWithChildren) {
                   Assets
                 </Link>
               </div>
+              <div className="navbar-end">
+                {session ? (
+                  <Link
+                    className="navbar-item"
+                    href="/"
+                    onClick={() => signOut()}
+                  >
+                    Sign out
+                  </Link>
+                ) : (
+                  <Link className="navbar-item" href="/auth/sign-in">
+                    Sign In
+                  </Link>
+                )}
+              </div>
             </div>
           </div>
         </nav>
       </header>
-      <main>{children}</main>
+      <main className="section">{children}</main>
     </>
   );
 }

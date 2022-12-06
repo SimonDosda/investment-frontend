@@ -1,8 +1,10 @@
 import { GetServerSideProps } from "next";
+import { getSession } from "next-auth/react";
 import Link from "next/link";
-import { fetchAPI } from "../../lib/api";
+import { fetchAPI } from "../../lib/api/base";
 import AssetsTable from "../../lib/components/AssetsTable";
 import { Asset } from "../../lib/models/asset";
+import { withAuthSsr } from "../../lib/utils/ssr";
 
 interface Props {
   assets: Asset[];
@@ -22,11 +24,10 @@ export default function Assets({ assets }: Props) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
+export const getServerSideProps = withAuthSsr<Props>(async ({ session }) => {
   const { data } = await fetchAPI<Asset[]>(`assets`, {
-    populate: "*",
+    token: session.jwt,
+    parameters: { populate: "*" },
   });
-  return {
-    props: { assets: data },
-  };
-};
+  return { props: { assets: data } };
+});

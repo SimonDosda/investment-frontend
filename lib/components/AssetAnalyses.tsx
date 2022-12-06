@@ -7,7 +7,7 @@ export default function AssetAnalyses({ asset }: { asset: Asset }) {
     createdAt: new Date(attributes.createdAt),
   }));
   return (
-    <section className="section">
+    <section>
       <div className="level">
         <h2 className="title">Analysis</h2>
         <Link

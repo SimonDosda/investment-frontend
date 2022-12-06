@@ -1,15 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { fetchAPI } from "../../../lib/api";
-
-type Data = {
-  name: string;
-};
+import { fetchAPI } from "../../../lib/api/base";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Data>
+  res: NextApiResponse
 ) {
   const body = JSON.stringify({ data: req.body });
-  await fetchAPI("assets", {}, { method: "POST", body });
+  await fetchAPI("assets", {
+    token: req.headers.authorization,
+    options: { method: "POST", body },
+  });
   res.redirect("/assets");
 }

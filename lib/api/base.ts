@@ -1,13 +1,23 @@
 import QueryString from "qs";
-import { StrapiData, StrapiParameters, StrapiResponse } from "./models/api";
+import { StrapiParameters, StrapiResponse } from "../models/api";
 
 export async function fetchAPI<T>(
   endpoint: string,
-  parameters: StrapiParameters<T> = {},
-  options: RequestInit = {}
+  {
+    token = null,
+    parameters = {},
+    options = {},
+  }: {
+    token?: string | null;
+    parameters?: StrapiParameters<T>;
+    options?: RequestInit;
+  }
 ): Promise<StrapiResponse<T>> {
   const mergedOptions: RequestInit = {
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
     ...options,
   };
 
@@ -17,7 +27,7 @@ export async function fetchAPI<T>(
   const response = await fetch(url, mergedOptions);
 
   if (!response.ok) {
-    console.error(response.statusText);
+    console.error(response);
     throw new Error(`An error occured please try again`);
   }
   return await response.json();

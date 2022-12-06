@@ -3,7 +3,7 @@ import { Asset } from "../models/asset";
 export default function AssetInfo({ asset }: { asset: Asset }) {
   const market = asset.attributes.market.data.attributes;
   return (
-    <section className="section">
+    <section>
       <h2 className="title">{asset.attributes.name}</h2>
       <h3 className="subtitle">{asset.attributes.sector}</h3>
       <div>
