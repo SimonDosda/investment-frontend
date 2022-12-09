@@ -43,13 +43,15 @@ export default function AssetsTable({ assets }: { assets: Asset[] }) {
                 <td>{orderAgreggate.current || "-"}</td>
                 <td>{orderAgreggate.expected || "-"}</td>
                 <td>
-                  <Link
-                    href={asset.attributes.link}
-                    className="button is-link"
-                    target="_blank"
-                  >
-                    See Details
-                  </Link>
+                  {asset.attributes.link && (
+                    <Link
+                      href={asset.attributes.link}
+                      className="button is-link"
+                      target="_blank"
+                    >
+                      See Details
+                    </Link>
+                  )}
                 </td>
               </tr>
             );

@@ -27,7 +27,7 @@ export async function fetchAPI<T>(
   const response = await fetch(url, mergedOptions);
 
   if (!response.ok) {
-    console.error(response);
+    console.error(await response.json());
     throw new Error(`An error occured please try again`);
   }
   return await response.json();

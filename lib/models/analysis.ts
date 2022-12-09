@@ -11,6 +11,8 @@ interface BaseAnalysis {
 
 export type Analysis = StrapiData<BaseAnalysis>;
 
+export type AnalysisInputs = BaseAnalysis;
+
 export type ParsedAnalysis = BaseAnalysis & ParsedStapiAttributes;
 
 export const trends = ["rising", "stable", "declining"] as const;

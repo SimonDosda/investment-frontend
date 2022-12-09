@@ -13,3 +13,5 @@ interface BaseAsset {
 }
 
 export type Asset = StrapiData<BaseAsset>;
+
+export type AssetInputs = Omit<BaseAsset, "analysis" | "orders">;

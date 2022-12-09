@@ -1,38 +1,52 @@
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { ParsedAnalysis, trends } from "../models/analysis";
-import { sectors } from "../models/market";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+import { AnalysisInputs, ParsedAnalysis, trends } from "../models/analysis";
 
 export default function AnalysisForm({
   analysis,
 }: {
   analysis: ParsedAnalysis | null;
 }) {
+  const { register, handleSubmit } = useForm<AnalysisInputs>({
+    defaultValues: {
+      value: analysis?.value,
+      PER: analysis?.PER,
+      trend: analysis?.trend,
+      dividendYield: analysis?.dividendYield,
+      aristocrat: analysis?.aristocrat,
+      rate: analysis?.rate,
+    },
+  });
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  const onSubmit = async (data: AnalysisInputs) => {
+    const result = await fetch("/api/analysis/new", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { authorization: session?.jwt || "" },
+    });
+    if (result.ok) {
+      router.push("/assets");
+    }
+  };
+
   return (
-    <form action="/api/analysis/new" method="post">
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="field">
         <label className="label" htmlFor="value">
           Value
         </label>
-        <input
-          className="input"
-          type="number"
-          id="value"
-          name="value"
-          defaultValue={analysis?.value}
-        />
+        <input className="input" type="number" {...register("value")} />
       </div>
 
       <div className="field">
         <label className="label" htmlFor="PER">
           PER
         </label>
-        <input
-          className="input"
-          type="number"
-          id="PER"
-          name="PER"
-          defaultValue={analysis?.PER}
-        />
+        <input className="input" type="number" {...register("PER")} />
       </div>
 
       <div className="field">
@@ -40,7 +54,7 @@ export default function AnalysisForm({
           Trend
         </label>
         <div className="select is-fullwidth">
-          <select name="trend" id="trend" defaultValue={analysis?.trend}>
+          <select {...register("trend")}>
             {trends.map((trend) => (
               <option value={trend} key={trend}>
                 {trend}
@@ -54,23 +68,12 @@ export default function AnalysisForm({
         <label className="label" htmlFor="dividendYield">
           Dividend Yield
         </label>
-        <input
-          className="input"
-          type="number"
-          id="dividendYield"
-          name="dividendYield"
-          defaultValue={analysis?.dividendYield}
-        />
+        <input className="input" type="number" {...register("dividendYield")} />
       </div>
 
       <div className="field">
         <label className="checkbox">
-          <input
-            type="checkbox"
-            id="aristocrat"
-            name="aristocrat"
-            checked={analysis?.aristocrat || false}
-          />
+          <input type="checkbox" {...register("aristocrat")} />
           Aristocrat
         </label>
       </div>
@@ -82,11 +85,7 @@ export default function AnalysisForm({
         <input
           className="input"
           type="number"
-          id="rate"
-          name="rate"
-          min={0}
-          max={10}
-          defaultValue={analysis?.rate}
+          {...register("rate", { min: 0, max: 10 })}
         />
       </div>
 

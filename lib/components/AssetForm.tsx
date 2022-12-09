@@ -1,14 +1,37 @@
+import { useSession } from "next-auth/react";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
+import { Asset, AssetInputs } from "../models/asset";
 import { Market, sectors } from "../models/market";
 
 export default function AssetForm({ markets }: { markets: Market[] }) {
+  const { register, handleSubmit } = useForm<AssetInputs>();
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  const onSubmit = async (data: AssetInputs) => {
+    const result = await fetch("/api/assets/new", {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { authorization: session?.jwt || "" },
+    });
+    if (result.ok) {
+      router.push("/assets");
+    }
+  };
+
   return (
-    <form action="/api/assets/new" method="post">
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="field">
         <label className="label" htmlFor="name">
           Asset
         </label>
-        <input className="input" type="text" id="name" name="name" />
+        <input
+          className="input"
+          type="text"
+          {...register("name", { required: true })}
+        />
       </div>
 
       <div className="field">
@@ -16,7 +39,7 @@ export default function AssetForm({ markets }: { markets: Market[] }) {
           Market
         </label>
         <div className="select is-fullwidth">
-          <select name="market" id="market">
+          <select {...register("market")}>
             {markets.map((market) => (
               <option value={market.id} key={market.id}>
                 {market.attributes.name}
@@ -31,7 +54,7 @@ export default function AssetForm({ markets }: { markets: Market[] }) {
           Sector
         </label>
         <div className="select is-fullwidth">
-          <select name="sector" id="sector">
+          <select {...register("sector")}>
             {sectors.map((sector) => (
               <option value={sector} key={sector}>
                 {sector}
@@ -45,7 +68,7 @@ export default function AssetForm({ markets }: { markets: Market[] }) {
         <label className="label" htmlFor="link">
           Link
         </label>
-        <input className="input" type="text" id="link" name="link" />
+        <input className="input" type="text" {...register("link")} />
       </div>
 
       <div className="field is-grouped">
