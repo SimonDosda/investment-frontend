@@ -1,7 +1,12 @@
 import Link from "next/link";
-import { useState } from "react";
 import { Asset } from "../models/asset";
 import { getLastAnalysis, getOrderAggregate } from "../utils/asset";
+import {
+  getCurrentyParser,
+  handleNull,
+  parseBool,
+  parsePercent,
+} from "../utils/parsers";
 
 export default function AssetsTable({ assets }: { assets: Asset[] }) {
   return (
@@ -26,6 +31,8 @@ export default function AssetsTable({ assets }: { assets: Asset[] }) {
           {assets.map((asset) => {
             const analysis = getLastAnalysis(asset);
             const orderAgreggate = getOrderAggregate(asset);
+            const currency = asset.attributes.market.data.attributes.currency;
+            const parseCurrency = getCurrentyParser(currency);
             return (
               <tr key={asset.id}>
                 <td>
@@ -35,13 +42,13 @@ export default function AssetsTable({ assets }: { assets: Asset[] }) {
                 </td>
                 <td>{asset.attributes.sector}</td>
                 <td>{asset.attributes.market.data.attributes.name}</td>
-                <td>{analysis?.PER || "-"}</td>
-                <td>{analysis?.trend || "-"}</td>
-                <td>{analysis?.dividendYield || "-"}</td>
-                <td>{analysis?.aristocrat ? "Y" : "N"}</td>
-                <td>{analysis?.rate || "-"}</td>
-                <td>{orderAgreggate.current || "-"}</td>
-                <td>{orderAgreggate.expected || "-"}</td>
+                <td>{handleNull(analysis?.PER, parseCurrency)}</td>
+                <td>{handleNull(analysis?.trend)}</td>
+                <td>{handleNull(analysis?.dividendYield, parsePercent)}</td>
+                <td>{handleNull(analysis?.aristocrat, parseBool)}</td>
+                <td>{handleNull(analysis?.rate)}</td>
+                <td>{handleNull(orderAgreggate?.current, parseCurrency)}</td>
+                <td>{handleNull(orderAgreggate?.expected, parseCurrency)}</td>
                 <td>
                   {asset.attributes.link && (
                     <Link

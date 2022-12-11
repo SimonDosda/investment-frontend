@@ -3,20 +3,23 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { AnalysisInputs, ParsedAnalysis, trends } from "../models/analysis";
+import { Asset } from "../models/asset";
 
 export default function AnalysisForm({
+  asset,
   analysis,
 }: {
+  asset: Asset;
   analysis: ParsedAnalysis | null;
 }) {
   const { register, handleSubmit } = useForm<AnalysisInputs>({
     defaultValues: {
-      value: analysis?.value,
-      PER: analysis?.PER,
-      trend: analysis?.trend,
-      dividendYield: analysis?.dividendYield,
-      aristocrat: analysis?.aristocrat,
-      rate: analysis?.rate,
+      value: analysis?.value || 0,
+      PER: analysis?.PER || 0,
+      trend: analysis?.trend || "stable",
+      dividendYield: analysis?.dividendYield || 0,
+      aristocrat: analysis?.aristocrat || false,
+      rate: analysis?.rate || 5,
     },
   });
   const { data: session } = useSession();

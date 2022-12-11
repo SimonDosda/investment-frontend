@@ -7,7 +7,7 @@ export default async function handler(
 ) {
   const data = JSON.parse(req.body);
   const body = JSON.stringify({ data });
-  await fetchAPI("assets", {
+  await fetchAPI("analyses", {
     token: req.headers.authorization,
     options: { method: "POST", body },
   });

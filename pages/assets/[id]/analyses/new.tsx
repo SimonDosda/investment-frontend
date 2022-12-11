@@ -2,7 +2,6 @@ import { GetServerSideProps } from "next";
 import { ParsedUrlQuery } from "querystring";
 import { fetchAPI } from "../../../../lib/api/base";
 import AnalysisForm from "../../../../lib/components/AnalysisForm";
-import AssetAnalyses from "../../../../lib/components/AssetAnalyses";
 import AssetInfo from "../../../../lib/components/AssetInfo";
 import { Asset } from "../../../../lib/models/asset";
 import { getLastAnalysis } from "../../../../lib/utils/asset";
@@ -18,7 +17,7 @@ export default function Assets({ asset }: Props) {
     <>
       <AssetInfo asset={asset} />
       <section className="section">
-        <AnalysisForm analysis={lastAnalysis} />
+        <AnalysisForm asset={asset} analysis={lastAnalysis} />
       </section>
     </>
   );

@@ -1,7 +1,6 @@
-import { GetServerSideProps } from "next";
-import { ParsedUrlQuery } from "querystring";
+import Link from "next/link";
 import { fetchAPI } from "../../../lib/api/base";
-import AssetAnalyses from "../../../lib/components/AssetAnalyses";
+import AnalysesTable from "../../../lib/components/AnalysesTable";
 import AssetInfo from "../../../lib/components/AssetInfo";
 import { Asset } from "../../../lib/models/asset";
 import { withAuthSsr } from "../../../lib/utils/ssr";
@@ -14,7 +13,13 @@ export default function Assets({ asset }: Props) {
   return (
     <>
       <AssetInfo asset={asset} />
-      <AssetAnalyses asset={asset} />
+      <Link
+        href={`/assets/${asset.id}/analyses/new`}
+        className="button is-link"
+      >
+        New Analysis
+      </Link>
+      <AnalysesTable asset={asset} />
     </>
   );
 }

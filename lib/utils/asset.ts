@@ -20,8 +20,12 @@ export const getLastAnalysis = (asset: Asset): ParsedAnalysis | null => {
   );
 };
 
-export const getOrderAggregate = (asset: Asset): OrderAggregate => {
-  return asset.attributes.orders.data.reduce(
+export const getOrderAggregate = (asset: Asset): OrderAggregate | null => {
+  const orders = asset.attributes.orders.data;
+  if (!orders.length) {
+    return null;
+  }
+  return orders.reduce(
     (aggregate: OrderAggregate, { attributes }): OrderAggregate => ({
       current:
         aggregate.current +

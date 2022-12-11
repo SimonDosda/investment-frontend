@@ -19,3 +19,7 @@ export const sectors = [
 ] as const;
 
 export type Sector = typeof sectors[number];
+
+export const currencies = ["EUR", "USD"];
+
+export type Currency = typeof currencies[number];
