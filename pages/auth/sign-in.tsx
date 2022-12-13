@@ -59,6 +59,10 @@ export default function SignIn() {
             Don't have an account yet?{" "}
             <Link href="/auth/register">Register</Link>
           </p>
+          <p>
+            Forgotten your password?{" "}
+            <Link href="/auth/reset-password">Reset your password</Link>
+          </p>
         </div>
       </form>
     </div>

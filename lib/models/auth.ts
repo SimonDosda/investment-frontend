@@ -15,3 +15,13 @@ export interface AuthResponse {
   user: BaseUser & StrapiAttributes;
   jwt: string;
 }
+
+export interface ForgotPasswordInputs {
+  email: string;
+}
+
+export interface ResetPasswordInputs {
+  code: string;
+  password: string;
+  passwordConfirmation: string;
+}
