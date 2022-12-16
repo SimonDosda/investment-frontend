@@ -1,9 +1,9 @@
-import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
 import { fetchAPI } from "../../lib/api/base";
 import AssetsTable from "../../lib/components/AssetsTable";
 import { Asset } from "../../lib/models/asset";
+import { setAssets } from "../../lib/store/assets";
 import { withAuthSsr } from "../../lib/utils/ssr";
 
 interface Props {
@@ -11,6 +11,8 @@ interface Props {
 }
 
 export default function Assets({ assets }: Props) {
+  const dispatch = useDispatch();
+  dispatch(setAssets(assets));
   return (
     <section className="section">
       <div className="level">
@@ -19,7 +21,7 @@ export default function Assets({ assets }: Props) {
           New Asset
         </Link>
       </div>
-      <AssetsTable assets={assets} />
+      <AssetsTable />
     </section>
   );
 }

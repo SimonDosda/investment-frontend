@@ -1,5 +1,8 @@
-import Link from "next/link";
-import { Asset } from "../models/asset";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectAssetsSlice as assetsSliceSelector,
+  setSelectedAsset,
+} from "../store/assets";
 import { getLastAnalysis, getOrderAggregate } from "../utils/asset";
 import {
   getCurrentyParser,
@@ -8,10 +11,13 @@ import {
   parsePercent,
 } from "../utils/parsers";
 
-export default function AssetsTable({ assets }: { assets: Asset[] }) {
+export default function AssetsTable({}: {}) {
+  const dispatch = useDispatch();
+  const { assets, selectedAsset } = useSelector(assetsSliceSelector);
+
   return (
     <div className="table-container">
-      <table className="table">
+      <table className="table is-hoverable">
         <thead>
           <tr>
             <th>Name</th>
@@ -24,7 +30,6 @@ export default function AssetsTable({ assets }: { assets: Asset[] }) {
             <th>Rate</th>
             <th>Bought</th>
             <th>Expected</th>
-            <th>Link</th>
           </tr>
         </thead>
         <tbody>
@@ -34,12 +39,12 @@ export default function AssetsTable({ assets }: { assets: Asset[] }) {
             const currency = asset.attributes.market.data.attributes.currency;
             const parseCurrency = getCurrentyParser(currency);
             return (
-              <tr key={asset.id}>
-                <td>
-                  <Link href={`/assets/${asset.id}`}>
-                    {asset.attributes.name}
-                  </Link>
-                </td>
+              <tr
+                key={asset.id}
+                onClick={() => dispatch(setSelectedAsset(asset))}
+                className={selectedAsset?.id === asset.id ? "is-selected" : ""}
+              >
+                <td>{asset.attributes.name}</td>
                 <td>{asset.attributes.sector}</td>
                 <td>{asset.attributes.market.data.attributes.name}</td>
                 <td>{handleNull(analysis?.PER, parseCurrency)}</td>
@@ -49,17 +54,6 @@ export default function AssetsTable({ assets }: { assets: Asset[] }) {
                 <td>{handleNull(analysis?.rate)}</td>
                 <td>{handleNull(orderAgreggate?.current, parseCurrency)}</td>
                 <td>{handleNull(orderAgreggate?.expected, parseCurrency)}</td>
-                <td>
-                  {asset.attributes.link && (
-                    <Link
-                      href={asset.attributes.link}
-                      className="button is-link"
-                      target="_blank"
-                    >
-                      See Details
-                    </Link>
-                  )}
-                </td>
               </tr>
             );
           })}
