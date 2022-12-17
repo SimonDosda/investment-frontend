@@ -2,21 +2,22 @@ import { getSession } from "next-auth/react";
 import { Asset, AssetInputs } from "../models/asset";
 import { fetchAPI } from "./base";
 
-export const fetchAssets = async (): Promise<Asset[]> => {
+export const getAssets = async (): Promise<Asset[]> => {
   const session = await getSession();
-  const { data } = await fetchAPI<Asset[]>(`assets`, {
+  const response = await fetchAPI<Asset[]>(`assets`, {
     token: session?.jwt,
     parameters: { populate: "*" },
   });
-  return data;
+  return response.data;
 };
 
-export const addAsset = async (data: AssetInputs) => {
+export const addAsset = async (data: AssetInputs): Promise<Asset> => {
   const session = await getSession();
   const body = JSON.stringify({ data });
-  const result = await fetchAPI("assets", {
+  const response = await fetchAPI<Asset>("assets", {
     token: session?.jwt,
     options: { method: "POST", body },
+    parameters: { populate: "*" },
   });
-  return result;
+  return response.data;
 };

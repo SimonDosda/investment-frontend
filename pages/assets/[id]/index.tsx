@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { fetchAPI } from "../../../lib/api/base";
-import AnalysesTable from "../../../lib/components/AnalysesTable";
+import AnalysesTable from "../../../lib/components/analyses/AnalysesTable";
 import AssetInfo from "../../../lib/components/AssetInfo";
 import { Asset } from "../../../lib/models/asset";
 import { withAuthSsr } from "../../../lib/utils/ssr";

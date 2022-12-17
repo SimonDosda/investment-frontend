@@ -1,10 +1,10 @@
-import { Asset } from "../models/asset";
+import { Asset } from "../../models/asset";
 import {
   getCurrentyParser,
   parseBool,
   parseDate,
   parsePercent,
-} from "../utils/parsers";
+} from "../../utils/parsers";
 
 export default function AnalysesTable({ asset }: { asset: Asset }) {
   const analyses = asset.attributes.analyses.data

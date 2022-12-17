@@ -1,11 +1,11 @@
-import Link from "next/link";
-import { Props } from "next/script";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { fetchAPI } from "../../lib/api/base";
-import AssetForm from "../../lib/components/AssetForm";
-import AssetsTable from "../../lib/components/AssetsTable";
+import AssetForm from "../../lib/components/assets/AssetForm";
+import AssetsTable from "../../lib/components/assets/AssetsTable";
+import Loading from "../../lib/components/layout/Loading";
 import { Market } from "../../lib/models/market";
-import { loadAssets } from "../../lib/store/assets";
+import { assetsSliceSelector, fetchAssets } from "../../lib/store/assets";
 import { useAppDispatch } from "../../lib/store/hooks";
 import { withAuthSsr } from "../../lib/utils/ssr";
 
@@ -16,9 +16,15 @@ interface Props {
 export default function Assets({ markets }: Props) {
   const [addingAsset, showAddAsset] = useState(false);
   const dispatch = useAppDispatch();
+  const { status } = useSelector(assetsSliceSelector);
   useEffect(() => {
-    dispatch(loadAssets());
+    if (status === "idle") {
+      dispatch(fetchAssets());
+    }
   }, []);
+  if (status === "loading") {
+    return <Loading />;
+  }
   return (
     <>
       <section className="section">

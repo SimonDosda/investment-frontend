@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Asset } from "../models/asset";
+import { Asset } from "../../models/asset";
 
 export default function AssetInfo({ asset }: { asset: Asset }) {
   const market = asset.attributes.market.data.attributes;

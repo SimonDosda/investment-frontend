@@ -1,9 +1,8 @@
 import "../styles/index.scss";
 import type { AppProps } from "next/app";
-import Layout from "../lib/components/Layout";
+import Layout from "../lib/components/layout/Layout";
 import { SessionProvider } from "next-auth/react";
 import { storeWrapper } from "../lib/store";
-import { NextComponentType } from "next";
 import Auth from "../lib/components/auth/Auth";
 
 function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {

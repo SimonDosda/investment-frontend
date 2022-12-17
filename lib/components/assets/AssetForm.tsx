@@ -1,7 +1,9 @@
 import { useForm } from "react-hook-form";
-import { addAsset } from "../api/assets";
-import { AssetInputs } from "../models/asset";
-import { Market, sectors } from "../models/market";
+import { addAsset } from "../../api/assets";
+import { AssetInputs } from "../../models/asset";
+import { Market, sectors } from "../../models/market";
+import { AddNewAsset } from "../../store/assets";
+import { useAppDispatch } from "../../store/hooks";
 
 export default function AssetForm({
   markets,
@@ -11,9 +13,10 @@ export default function AssetForm({
   close?: () => void;
 }) {
   const { register, handleSubmit } = useForm<AssetInputs>();
+  const dispatch = useAppDispatch();
 
   const onSubmit = async (data: AssetInputs) => {
-    await addAsset(data);
+    dispatch(AddNewAsset(data));
     if (close) {
       close();
     }
