@@ -1,23 +1,21 @@
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import { Asset, AssetInputs } from "../models/asset";
+import { addAsset } from "../api/assets";
+import { AssetInputs } from "../models/asset";
 import { Market, sectors } from "../models/market";
 
-export default function AssetForm({ markets }: { markets: Market[] }) {
+export default function AssetForm({
+  markets,
+  close,
+}: {
+  markets: Market[];
+  close?: () => void;
+}) {
   const { register, handleSubmit } = useForm<AssetInputs>();
-  const { data: session } = useSession();
-  const router = useRouter();
 
   const onSubmit = async (data: AssetInputs) => {
-    const result = await fetch("/api/assets/new", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: { authorization: session?.jwt || "" },
-    });
-    if (result.ok) {
-      router.push("/assets");
+    await addAsset(data);
+    if (close) {
+      close();
     }
   };
 
@@ -77,11 +75,17 @@ export default function AssetForm({ markets }: { markets: Market[] }) {
             Submit
           </button>
         </div>
-        <div className="control">
-          <Link href="/assets" className="button is-link is-light">
-            Cancel
-          </Link>
-        </div>
+        {close && (
+          <div className="control">
+            <button
+              type="button"
+              className="button is-link is-light"
+              onClick={close}
+            >
+              Cancel
+            </button>
+          </div>
+        )}
       </div>
     </form>
   );
