@@ -1,4 +1,8 @@
-import { assetsSliceSelector, setSelectedAsset } from "../../store/assets";
+import {
+  assetsSelectors,
+  assetsSliceSelector,
+  setSelectedId,
+} from "../../store/assets";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { getLastAnalysis, getOrderAggregate } from "../../utils/asset";
 import {
@@ -10,7 +14,8 @@ import {
 
 export default function AssetsTable({}: {}) {
   const dispatch = useAppDispatch();
-  const { entities, selectedEntity } = useAppSelector(assetsSliceSelector);
+  const assets = useAppSelector(assetsSelectors.selectAll);
+  const { selectedId } = useAppSelector(assetsSliceSelector);
 
   return (
     <div className="table-container">
@@ -30,7 +35,7 @@ export default function AssetsTable({}: {}) {
           </tr>
         </thead>
         <tbody>
-          {entities.map((asset) => {
+          {assets.map((asset) => {
             const analysis = getLastAnalysis(asset);
             const orderAgreggate = getOrderAggregate(asset);
             const currency = asset.attributes.market.data.attributes.currency;
@@ -38,8 +43,8 @@ export default function AssetsTable({}: {}) {
             return (
               <tr
                 key={asset.id}
-                onClick={() => dispatch(setSelectedAsset(asset))}
-                className={selectedEntity?.id === asset.id ? "is-selected" : ""}
+                onClick={() => dispatch(setSelectedId(asset.id))}
+                className={selectedId === asset.id ? "is-selected" : ""}
               >
                 <td>{asset.attributes.name}</td>
                 <td>{asset.attributes.sector}</td>

@@ -1,54 +1,53 @@
-import { CaseReducer, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AppDispatch, AppState } from ".";
+import {
+  createAsyncThunk,
+  createEntityAdapter,
+  createSlice,
+} from "@reduxjs/toolkit";
+import { AppState } from ".";
 import { addAsset, getAssets } from "../api/assets";
-import { fetchAPI } from "../api/base";
 import { Asset, AssetInputs } from "../models/asset";
 
+const assetsAdapter = createEntityAdapter<Asset>();
+
 interface AssetsSlice {
-  entities: Asset[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
-  selectedEntity: Asset | null;
+  selectedId: number | null;
 }
 
-type AssetsReducers = {
-  setSelectedAsset: CaseReducer<AssetsSlice, { payload: Asset; type: string }>;
-};
+const initialState = assetsAdapter.getInitialState<AssetsSlice>({
+  status: "idle",
+  error: null,
+  selectedId: null,
+});
 
-export const assetsSlice = createSlice<AssetsSlice, AssetsReducers>({
+export const assetsSlice = createSlice({
   name: "assets",
-  initialState: {
-    entities: [],
-    status: "idle",
-    error: null,
-    selectedEntity: null,
-  },
+  initialState,
   reducers: {
-    setSelectedAsset: (state, { payload }) => ({
+    setSelectedId: (state, { payload }) => ({
       ...state,
-      selectedAsset: payload,
+      selectedId: payload,
     }),
   },
   extraReducers(builder) {
     builder
-      .addCase(fetchAssets.pending, (state, action) => {
+      .addCase(fetchAssets.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchAssets.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.entities = action.payload;
+        assetsAdapter.upsertMany(state, action.payload);
       })
       .addCase(fetchAssets.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || null;
       })
-      .addCase(AddNewAsset.fulfilled, (state, action) => {
-        state.entities = [...state.entities, action.payload];
-      });
+      .addCase(AddNewAsset.fulfilled, assetsAdapter.addOne);
   },
 });
 
-export const { setSelectedAsset } = assetsSlice.actions;
+export const { setSelectedId } = assetsSlice.actions;
 
 export const fetchAssets = createAsyncThunk(
   "assets/fetchAssets",
@@ -61,3 +60,5 @@ export const AddNewAsset = createAsyncThunk(
 );
 
 export const assetsSliceSelector = ({ assets }: AppState) => assets;
+export const assetsSelectors =
+  assetsAdapter.getSelectors<AppState>(assetsSliceSelector);

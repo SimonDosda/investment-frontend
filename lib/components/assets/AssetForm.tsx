@@ -16,7 +16,7 @@ export default function AssetForm({
   const dispatch = useAppDispatch();
 
   const onSubmit = async (data: AssetInputs) => {
-    dispatch(AddNewAsset(data));
+    await dispatch(AddNewAsset(data)).unwrap();
     if (close) {
       close();
     }
