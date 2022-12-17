@@ -1,18 +1,11 @@
 import Link from "next/link";
-import { useDispatch } from "react-redux";
-import { fetchAPI } from "../../lib/api/base";
 import AssetsTable from "../../lib/components/AssetsTable";
-import { Asset } from "../../lib/models/asset";
-import { setAssets } from "../../lib/store/assets";
-import { withAuthSsr } from "../../lib/utils/ssr";
+import { loadAssets } from "../../lib/store/assets";
+import { useAppDispatch } from "../../lib/store/hooks";
 
-interface Props {
-  assets: Asset[];
-}
-
-export default function Assets({ assets }: Props) {
-  const dispatch = useDispatch();
-  dispatch(setAssets(assets));
+export default function Assets() {
+  const dispatch = useAppDispatch();
+  dispatch(loadAssets());
   return (
     <section className="section">
       <div className="level">
@@ -26,10 +19,4 @@ export default function Assets({ assets }: Props) {
   );
 }
 
-export const getServerSideProps = withAuthSsr<Props>(async ({ session }) => {
-  const { data } = await fetchAPI<Asset[]>(`assets`, {
-    token: session.jwt,
-    parameters: { populate: "*" },
-  });
-  return { props: { assets: data } };
-});
+Assets.auth = true;

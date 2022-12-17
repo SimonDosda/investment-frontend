@@ -1,10 +1,6 @@
-import {
-  GetServerSideProps,
-  GetServerSidePropsContext,
-  GetServerSidePropsResult,
-} from "next";
+import { GetServerSidePropsContext, GetServerSidePropsResult } from "next";
 import { Session } from "next-auth";
-import { getSession, useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 
 export function withAuthSsr<P>(
   handler: (

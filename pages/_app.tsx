@@ -3,12 +3,20 @@ import type { AppProps } from "next/app";
 import Layout from "../lib/components/Layout";
 import { SessionProvider } from "next-auth/react";
 import { storeWrapper } from "../lib/store";
+import { NextComponentType } from "next";
+import Auth from "../lib/components/auth/Auth";
 
 function App({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <SessionProvider session={session}>
       <Layout>
-        <Component {...pageProps} />
+        {Component.auth ? (
+          <Auth>
+            <Component {...pageProps} />
+          </Auth>
+        ) : (
+          <Component {...pageProps} />
+        )}
       </Layout>
     </SessionProvider>
   );

@@ -1,8 +1,5 @@
-import { useDispatch, useSelector } from "react-redux";
-import {
-  selectAssetsSlice as assetsSliceSelector,
-  setSelectedAsset,
-} from "../store/assets";
+import { assetsSliceSelector, setSelectedAsset } from "../store/assets";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getLastAnalysis, getOrderAggregate } from "../utils/asset";
 import {
   getCurrentyParser,
@@ -12,8 +9,8 @@ import {
 } from "../utils/parsers";
 
 export default function AssetsTable({}: {}) {
-  const dispatch = useDispatch();
-  const { assets, selectedAsset } = useSelector(assetsSliceSelector);
+  const dispatch = useAppDispatch();
+  const { assets, selectedAsset } = useAppSelector(assetsSliceSelector);
 
   return (
     <div className="table-container">

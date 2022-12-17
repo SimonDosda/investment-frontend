@@ -1,5 +1,6 @@
 import { CaseReducer, createSlice } from "@reduxjs/toolkit";
-import { AppState } from ".";
+import { AppDispatch, AppState } from ".";
+import { fetchAssets } from "../api/assets";
 import { Asset } from "../models/asset";
 
 interface AssetsSlice {
@@ -29,4 +30,8 @@ export const assetsSlice = createSlice<AssetsSlice, AssetsReducers>({
 
 export const { setAssets, setSelectedAsset } = assetsSlice.actions;
 
-export const selectAssetsSlice = ({ assets }: AppState) => assets;
+export const loadAssets = () => (dispatch: AppDispatch) => {
+  fetchAssets().then((assets) => dispatch(setAssets(assets)));
+};
+
+export const assetsSliceSelector = ({ assets }: AppState) => assets;
