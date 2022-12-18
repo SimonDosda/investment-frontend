@@ -21,7 +21,7 @@ export async function fetchAPI<T>(
     ...options,
   };
 
-  const strapiUrl = process.env.STRAPI_URL || "http://localhost:1337";
+  const strapiUrl = process.env.STRAPI_URL || "http://localhost:7000";
   const url = `${strapiUrl}/api/${endpoint}${getQuery(parameters)}`;
 
   const response = await fetch(url, mergedOptions);

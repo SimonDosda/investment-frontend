@@ -25,3 +25,10 @@ export interface ResetPasswordInputs {
   password: string;
   passwordConfirmation: string;
 }
+
+export interface RegiserUserInputs {
+  name: string;
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+}

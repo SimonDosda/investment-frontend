@@ -1,11 +1,11 @@
-import { AuthResponse } from "../models/auth";
+import { AuthResponse, RegiserUserInputs } from "../models/auth";
 import { fetchAPI } from "./base";
 
 export async function signIn(credentials: {
-  identifier: string;
+  email: string;
   password: string;
 }): Promise<AuthResponse> {
-  return (await fetchAPI("auth/local", {
+  return (await fetchAPI("users/login", {
     options: {
       method: "POST",
       body: JSON.stringify(credentials),
@@ -13,15 +13,13 @@ export async function signIn(credentials: {
   })) as unknown as AuthResponse;
 }
 
-export async function register(credentials: {
-  username: string;
-  email: string;
-  password: string;
-}): Promise<AuthResponse> {
-  return (await fetchAPI("auth/local/register", {
+export async function registerUser(
+  inputs: RegiserUserInputs
+): Promise<AuthResponse> {
+  return (await fetchAPI("users", {
     options: {
       method: "POST",
-      body: JSON.stringify(credentials),
+      body: JSON.stringify(inputs),
     },
   })) as unknown as AuthResponse;
 }
