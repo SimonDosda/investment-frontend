@@ -7,7 +7,12 @@ declare module "next-auth" {
    */
   interface Session {
     user: User & DefaultSession["user"];
-    jwt: string;
+    token: string;
+    refresh_token: string;
     expires: DefaultSession["expires"];
+  }
+  interface User extends User {
+    token: string;
+    refresh_token: string;
   }
 }

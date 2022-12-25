@@ -1,19 +1,7 @@
-import { ParsedStapiAttributes, StrapiAttributes } from "./api";
-
-interface BaseUser {
+export interface User {
   id: string;
-  username: string;
+  name: string;
   email: string;
-  provider: string;
-  confirmed: boolean;
-  blocked: boolean;
-}
-
-export type User = BaseUser & ParsedStapiAttributes;
-
-export interface AuthResponse {
-  user: BaseUser & StrapiAttributes;
-  jwt: string;
 }
 
 export interface ForgotPasswordInputs {
@@ -31,4 +19,23 @@ export interface RegiserUserInputs {
   email: string;
   password: string;
   passwordConfirmation: string;
+}
+
+export interface RegisterUserResponse {
+  name: string;
+  email: string;
+}
+
+export interface LoginInputs {
+  email: string;
+  password: string;
+}
+
+export interface Token {
+  token: string;
+  refresh_token: string;
+}
+
+export interface LoginResponse extends Token {
+  user: User;
 }

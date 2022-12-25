@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { registerUser } from "../../api/auth";
-import { RegiserUserInputs, ResetPasswordInputs } from "../../models/auth";
+import { RegiserUserInputs } from "../../models/auth";
 
 export default function RegisterUser() {
   const { register, handleSubmit } = useForm<RegiserUserInputs>();
@@ -10,7 +10,7 @@ export default function RegisterUser() {
 
   const onSubmit = async (data: RegiserUserInputs) => {
     const result = await registerUser(data);
-    if (result.user) {
+    if (result.name) {
       router.push("/auth/sign-in");
     }
     alert("Something went wrong");

@@ -5,10 +5,9 @@ import { fetchAPI } from "./base";
 export const getAssets = async (): Promise<Asset[]> => {
   const session = await getSession();
   const response = await fetchAPI<Asset[]>(`assets`, {
-    token: session?.jwt,
-    parameters: { populate: "*" },
+    token: session?.token,
   });
-  return response.data;
+  return response;
 };
 
 export const addAsset = async (data: AssetInputs): Promise<Asset> => {
@@ -17,7 +16,6 @@ export const addAsset = async (data: AssetInputs): Promise<Asset> => {
   const response = await fetchAPI<Asset>("assets", {
     token: session?.jwt,
     options: { method: "POST", body },
-    parameters: { populate: "*" },
   });
   return response.data;
 };

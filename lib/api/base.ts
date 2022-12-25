@@ -1,18 +1,13 @@
-import QueryString from "qs";
-import { StrapiParameters, StrapiResponse } from "../models/api";
-
 export async function fetchAPI<T>(
   endpoint: string,
   {
     token = null,
-    parameters = {},
     options = {},
   }: {
     token?: string | null;
-    parameters?: StrapiParameters<T>;
     options?: RequestInit;
   }
-): Promise<StrapiResponse<T>> {
+): Promise<T> {
   const mergedOptions: RequestInit = {
     headers: {
       "Content-Type": "application/json",
@@ -21,8 +16,8 @@ export async function fetchAPI<T>(
     ...options,
   };
 
-  const strapiUrl = process.env.STRAPI_URL || "http://localhost:7000";
-  const url = `${strapiUrl}/api/${endpoint}${getQuery(parameters)}`;
+  const apiUrl = process.env.API_URL || "http://localhost:7000";
+  const url = `${apiUrl}/api/${endpoint}`;
 
   const response = await fetch(url, mergedOptions);
 
@@ -33,15 +28,14 @@ export async function fetchAPI<T>(
   return await response.json();
 }
 
-function getQuery<T>(parameters: StrapiParameters<T>): string {
-  if (!Object.keys(parameters).length) {
-    return "";
-  }
-  const query = QueryString.stringify({
-    ...parameters,
-    ...(parameters.sort
-      ? { sort: `${String(parameters.sort.key)}:${parameters.sort.order}` }
-      : {}),
+export async function postApi<T, I extends {}>(
+  endpoint: string,
+  inputs: I
+): Promise<T> {
+  return fetchAPI(endpoint, {
+    options: {
+      method: "POST",
+      body: JSON.stringify(inputs),
+    },
   });
-  return `?${query}`;
 }

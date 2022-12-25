@@ -1,8 +1,12 @@
-import NextAuth from "next-auth";
+import { Session } from "inspector";
+import NextAuth, { User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { signIn } from "../../../lib/api/auth";
 
 export default NextAuth({
+  pages: {
+    signIn: "/auth/sign-in",
+  },
   // Configure one or more authentication providers
   providers: [
     CredentialsProvider({
@@ -17,17 +21,17 @@ export default NextAuth({
          * If authenticated, the function should return an object contains the user data.
          * If not, the function should return `null`.
          */
-        if (credentials == null) return null;
+        if (!credentials) return null;
         /**
          * credentials is defined in the config above.
          * We can expect it contains two properties: `email` and `password`
          */
         try {
-          const { user, jwt } = await signIn({
+          const { token, refresh_token, user } = await signIn({
             email: credentials.email,
             password: credentials.password,
           });
-          return { ...user, jwt };
+          return { token, refresh_token, ...user };
         } catch (error) {
           // Sign In Fail
           return null;
@@ -38,14 +42,15 @@ export default NextAuth({
   callbacks: {
     session: async ({ session, token }) => {
       session.id = token.id;
-      session.jwt = token.jwt;
+      session.token = token.token;
+      session.refresh_token = token.refresh_token;
       return Promise.resolve(session);
     },
     jwt: async ({ token, user }) => {
-      const isSignIn = user ? true : false;
-      if (isSignIn) {
+      if (user) {
         token.id = user.id;
-        token.jwt = user.jwt;
+        token.token = user.token;
+        token.refresh_token = user.refresh_token;
       }
       return Promise.resolve(token);
     },

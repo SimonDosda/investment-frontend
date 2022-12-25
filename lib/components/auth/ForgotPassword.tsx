@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { sendResetPasswordLink } from "../../api/auth";
 import { ForgotPasswordInputs } from "../../models/auth";
 
 export default function ForgotPassword() {
@@ -8,11 +9,8 @@ export default function ForgotPassword() {
   const [email, setEmail] = useState("");
 
   const onSubmit = async (data: ForgotPasswordInputs) => {
-    const result = await fetch("/api/auth/forgot-password", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
-    if (result.ok) {
+    const sent = await sendResetPasswordLink(data);
+    if (sent) {
       setEmail(data.email);
     }
     alert("Something went wrong");

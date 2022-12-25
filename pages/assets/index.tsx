@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { fetchAPI } from "../../lib/api/base";
 import AssetForm from "../../lib/components/assets/AssetForm";
+import AssetsFilters from "../../lib/components/assets/AssetsFilters";
 import AssetsTable from "../../lib/components/assets/AssetsTable";
 import Loading from "../../lib/components/layout/Loading";
 import { Market } from "../../lib/models/market";
@@ -14,7 +15,6 @@ interface Props {
 }
 
 export default function Assets({ markets }: Props) {
-  const [addingAsset, showAddAsset] = useState(false);
   const dispatch = useAppDispatch();
   const { status } = useSelector(assetsSliceSelector);
   useEffect(() => {
@@ -30,28 +30,15 @@ export default function Assets({ markets }: Props) {
       <section className="section">
         <div className="level">
           <h2 className="title">Assets</h2>
-          <button
-            className="button is-link"
-            onClick={() => showAddAsset(!addingAsset)}
-          >
-            New Asset
-          </button>
         </div>
+        <AssetsFilters />
         <AssetsTable />
       </section>
-      {addingAsset && (
-        <section className="section">
-          <div className="container is-max-desktop">
-            <h2 className="title">Add new asset</h2>
-            <AssetForm markets={markets} close={() => showAddAsset(false)} />
-          </div>
-        </section>
-      )}
     </>
   );
 }
 
-export const getServerSideProps = withAuthSsr<Props>(async ({ session }) => {
-  const { data } = await fetchAPI<Market[]>(`markets`, { token: session.jwt });
-  return { props: { markets: data } };
-});
+// export const getServerSideProps = withAuthSsr<Props>(async ({ session }) => {
+//   const { data } = await fetchAPI<Market[]>(`markets`, { token: session.jwt });
+//   return { props: { markets: data } };
+// });

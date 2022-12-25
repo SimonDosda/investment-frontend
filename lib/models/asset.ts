@@ -1,17 +1,10 @@
-import { Analysis } from "./analysis";
-import { StrapiData, StrapiResponse } from "./api";
-import { Market } from "./market";
-import { Order } from "./order";
+export const assetTypes = ["Stock", "ETF", "Crypto", "Commodity"] as const;
+export type AssetType = typeof assetTypes[number];
 
-interface BaseAsset {
+export interface Asset {
+  id: number;
+  symbol: string;
   name: string;
-  sector: string;
-  link: string;
-  market: StrapiResponse<Market>;
-  analyses: StrapiResponse<Analysis[]>;
-  orders: StrapiResponse<Order[]>;
+  asset_type: AssetType;
+  exchange_id: number;
 }
-
-export type Asset = StrapiData<BaseAsset>;
-
-export type AssetInputs = Omit<BaseAsset, "analysis" | "orders">;
